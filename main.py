@@ -2,12 +2,11 @@ import numpy as np
 from src.simulation import Simulation
 from src.analysis import run_experiment, analyze_results, compare_agent_types
 from src.visualization import (
-    create_performance_dashboard,
+    plot_performance_metrics,
+    plot_efficiency_metrics,
     plot_agent_comparison,
-    create_distribution_plots,
-    create_agent_comparison_plots,
-    create_dirty_comparison_plots,
-    plot_all_metrics
+    plot_comparative_summary,
+    run_analysis_visualization
 )
 
 
@@ -78,8 +77,7 @@ def main():
     )
     
     print("\nGenerating performance analysis plots...")
-    dashboard = create_performance_dashboard(base_results, agent_results, dirty_results)
-    dashboard.show()
+    run_analysis_visualization(base_results, agent_results, dirty_results)
     
     # Compare different agent types
     print("\nComparing different agent types...")
