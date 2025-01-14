@@ -20,11 +20,11 @@ class Simulation:
         self.max_time = max_time
         self.current_time = 0
         self.initial_dirty = self.environment.get_dirty_count()
-
     def _initialize_agents(self, num_agents: int) -> List[Agent]:
         agents = []
         for i in range(num_agents):
-            if i % 3 == 0:  # Alternar entre los tipos de agentes
+            # Distribute agents evenly: 1/3 Basic, 1/3 Smart, 1/3 Efficient
+            if i % 3 == 0:
                 agents.append(BasicAgent((0, 0)))
             elif i % 3 == 1:
                 agents.append(SmartAgent((0, 0)))
