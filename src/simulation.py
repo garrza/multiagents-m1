@@ -3,6 +3,7 @@ from .environment import Environment
 from .agents.base import Agent
 from .agents.basic_agent import BasicAgent
 from .agents.smart_agent import SmartAgent
+from .agents.efficient_agent import EfficientAgent
 
 
 class Simulation:
@@ -23,10 +24,12 @@ class Simulation:
     def _initialize_agents(self, num_agents: int) -> List[Agent]:
         agents = []
         for i in range(num_agents):
-            if i % 2 == 0:
+            if i % 3 == 0:  # Alternar entre los tipos de agentes
                 agents.append(BasicAgent((0, 0)))
-            else:
+            elif i % 3 == 1:
                 agents.append(SmartAgent((0, 0)))
+            else:
+                agents.append(EfficientAgent((0, 0)))
         return agents
 
     def run(self) -> Dict:

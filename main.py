@@ -5,7 +5,7 @@ from src.analysis import run_experiment, analyze_results
 def main():
     width = 20
     height = 20
-    num_agents = 4
+    num_agents = 6
     dirty_percentage = 0.5
     max_time = 1000
     num_trials = 100
