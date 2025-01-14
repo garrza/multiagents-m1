@@ -1,109 +1,14 @@
 import numpy as np
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
 from src.simulation import Simulation
 from src.analysis import run_experiment, analyze_results, compare_agent_types
-from src.visualization import create_performance_dashboard, plot_agent_comparison
-
-
-def create_distribution_plots(fig, times, moves, clean_percentages):
-    """Add distribution plots to the figure for time, moves, and clean percentages.
-    
-    Args:
-        fig: Plotly figure object
-        times: List of completion times
-        moves: List of total moves
-        clean_percentages: List of clean percentages
-    """
-    metrics = [(times, 'Time'), (moves, 'Moves'), (clean_percentages, 'Clean %')]
-    
-    for idx, (data, name) in enumerate(metrics, 1):
-        fig.add_trace(
-            go.Histogram(x=data, name=f'{name} Distribution', nbinsx=20),
-            row=1, col=idx
-        )
-        fig.add_vline(x=np.mean(data), line_dash="dash", line_color="red",
-                      annotation_text="Mean", row=1, col=idx)
-
-
-def create_agent_comparison_plots(fig, agent_results):
-    """Add agent comparison plots to the figure.
-    
-    Args:
-        fig: Plotly figure object
-        agent_results: Dictionary containing results for different agent counts
-    """
-    agents = sorted(agent_results.keys())
-    metrics = ['times', 'moves', 'clean']
-    labels = ['Time', 'Moves', 'Clean %']
-    
-    for idx, (metric, label) in enumerate(zip(metrics, labels), 1):
-        avgs = [np.mean(agent_results[a][metric]) for a in agents]
-        stds = [np.std(agent_results[a][metric]) for a in agents]
-        fig.add_trace(
-            go.Scatter(x=agents, y=avgs, mode='markers', 
-                      name=f'Average {label}',
-                      error_y=dict(type='data', array=stds, visible=True)),
-            row=2, col=idx
-        )
-
-
-def create_dirty_comparison_plots(fig, dirty_results):
-    """Add dirty percentage comparison plots to the figure.
-    
-    Args:
-        fig: Plotly figure object
-        dirty_results: Dictionary containing results for different initial dirty percentages
-    """
-    pcts = sorted(dirty_results.keys())
-    metrics = ['times', 'moves', 'clean']
-    labels = ['Time', 'Moves', 'Clean %']
-    
-    for idx, (metric, label) in enumerate(zip(metrics, labels), 1):
-        avgs = [np.mean(dirty_results[p][metric]) for p in pcts]
-        stds = [np.std(dirty_results[p][metric]) for p in pcts]
-        fig.add_trace(
-            go.Scatter(x=pcts, y=avgs, mode='markers',
-                      name=f'Average {label}',
-                      error_y=dict(type='data', array=stds, visible=True)),
-            row=3, col=idx
-        )
-
-
-def plot_all_metrics(base_results, agent_results, dirty_results):
-    """Create a comprehensive visualization of all metrics from the simulation.
-    
-    Args:
-        base_results: List of results from base simulation runs
-        agent_results: Dictionary of results with varying agent counts
-        dirty_results: Dictionary of results with varying initial dirty percentages
-    
-    Returns:
-        Plotly figure object containing all plots
-    """
-    fig = make_subplots(
-        rows=3, cols=3,
-        subplot_titles=(
-            'Distribution of Time Taken', 'Distribution of Moves Made', 'Distribution of Clean Percentage',
-            'Average Time vs Number of Agents', 'Average Moves vs Number of Agents', 'Average Clean % vs Number of Agents',
-            'Average Time vs Initial Dirty %', 'Average Moves vs Initial Dirty %', 'Average Clean % vs Initial Dirty %'
-        )
-    )
-    
-    # Extract base metrics
-    times = [r['time_taken'] for r in base_results]
-    moves = [r['total_moves'] for r in base_results]
-    clean_percentages = [r['clean_percentage'] for r in base_results]
-
-    # Create all plots
-    create_distribution_plots(fig, times, moves, clean_percentages)
-    create_agent_comparison_plots(fig, agent_results)
-    create_dirty_comparison_plots(fig, dirty_results)
-
-    # Update layout
-    fig.update_layout(height=900, width=1200, showlegend=False)
-    return fig
+from src.visualization import (
+    create_performance_dashboard,
+    plot_agent_comparison,
+    create_distribution_plots,
+    create_agent_comparison_plots,
+    create_dirty_comparison_plots,
+    plot_all_metrics
+)
 
 
 def run_comparative_analysis(width, height, max_time, num_trials):
